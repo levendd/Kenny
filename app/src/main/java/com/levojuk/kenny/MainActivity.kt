@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
         imageArray.add(binding.imageView)
         imageArray.add(binding.imageView1)
         imageArray.add(binding.imageView2)
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             start.show()
 
         }
-        else if (game) {
+        else {
             hideImages()
             object : CountDownTimer(15000,1000){
                 override fun onTick(p0: Long) {
@@ -132,14 +133,11 @@ class MainActivity : AppCompatActivity() {
                     image.visibility = View.INVISIBLE
                 }
                 val random = Random()
-
                 var randomIndex = random.nextInt(9)
-
                     if (randomIndex == check){
                         if(check==8){randomIndex --}
                         else if (check==0){randomIndex++}
                         else (randomIndex++)
-
                     }
                 imageArray[randomIndex].visibility = View.VISIBLE
 
