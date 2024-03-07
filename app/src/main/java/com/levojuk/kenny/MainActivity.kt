@@ -20,9 +20,9 @@ class MainActivity : AppCompatActivity() {
     var handler = Handler(Looper.getMainLooper())
     var score = 0
     var time= 0
-    var check =10
+    private var check =10
 
-    var imageArray = ArrayList<ImageView>()
+    private var imageArray = ArrayList<ImageView>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -39,13 +39,13 @@ class MainActivity : AppCompatActivity() {
         imageArray.add(binding.imageView7)
         imageArray.add(binding.imageView8)
 
-        var game = intent.getBooleanExtra("restart",false)
+        val game = intent.getBooleanExtra("restart",false)
         println("gelen veri : $game")
         if (!game){
             val start : AlertDialog.Builder = AlertDialog.Builder(this@MainActivity)
             start
                 .setMessage("Are u Ready")
-                .setPositiveButton("I'm ready"){ dialogInterface: DialogInterface, i: Int ->
+                .setPositiveButton("I'm ready"){ _: DialogInterface, _: Int ->
                     hideImages()
                     object : CountDownTimer(15000,1000){
                         override fun onTick(p0: Long) {
@@ -60,24 +60,21 @@ class MainActivity : AppCompatActivity() {
                             builder
                                 .setMessage("Your Score : $score")
                                 .setTitle("GAME OVER")
-                                .setPositiveButton("Restart",object : DialogInterface.OnClickListener{
-                                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                                        val intentFromMain = Intent(this@MainActivity,MainActivity::class.java)
+                                .setPositiveButton("Restart"
+                                ) { _, _ ->
+                                    val intentFromMain =
+                                        Intent(this@MainActivity, MainActivity::class.java)
 
-                                        finish()
-                                        intentFromMain.putExtra("restart",true)
-                                        startActivity(intentFromMain)
-                                    }
-                                })
-                                .setNegativeButton("EXIT",object : DialogInterface.OnClickListener{
-                                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                                        finish()
-                                    }
-                                })
+                                    finish()
+                                    intentFromMain.putExtra("restart", true)
+                                    startActivity(intentFromMain)
+                                }
+                                .setNegativeButton("EXIT"
+                                ) { _, _ -> finish() }
                             builder.show()
                         }
                     }.start()}
-                .setNegativeButton("No I'm chicken"){ dialogInterface: DialogInterface, i: Int -> finish()}
+                .setNegativeButton("No I'm chicken"){ _: DialogInterface, _: Int -> finish()}
             start.show()
 
         }
@@ -96,20 +93,16 @@ class MainActivity : AppCompatActivity() {
                     builder
                         .setMessage("Your Score : $score")
                         .setTitle("GAME OVER")
-                        .setPositiveButton("Restart",object : DialogInterface.OnClickListener{
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-                                val intentFromMain = Intent(this@MainActivity,MainActivity::class.java)
+                        .setPositiveButton("Restart"
+                        ) { _, _ ->
+                            val intentFromMain = Intent(this@MainActivity, MainActivity::class.java)
 
-                                finish()
-                                intentFromMain.putExtra("restart",true)
-                                startActivity(intentFromMain)
-                            }
-                        })
-                        .setNegativeButton("EXIT",object : DialogInterface.OnClickListener{
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-                                finish()
-                            }
-                        })
+                            finish()
+                            intentFromMain.putExtra("restart", true)
+                            startActivity(intentFromMain)
+                        }
+                        .setNegativeButton("EXIT"
+                        ) { _, _ -> finish() }
                     builder.show()
                 }
             }.start()
@@ -126,24 +119,20 @@ class MainActivity : AppCompatActivity() {
            println("TİME : $time")
        }
     }
-    fun hideImages(){
-        runnable = object :Runnable {
-            override fun run() {
-                for (image in imageArray){
-                    image.visibility = View.INVISIBLE
-                }
-                val random = Random()
-                var randomIndex = random.nextInt(9)
-                    if (randomIndex == check){
-                        if(check==8){randomIndex --}
-                        else if (check==0){randomIndex++}
-                        else (randomIndex++)
-                    }
-                imageArray[randomIndex].visibility = View.VISIBLE
-
-                handler.postDelayed(runnable,500)
-                check = randomIndex
+    private fun hideImages(){
+        runnable = Runnable {
+            for (image in imageArray){
+                image.visibility = View.INVISIBLE
             }
+            val random = Random()
+            var randomIndex = random.nextInt(9)
+            if (randomIndex == check){
+                if(check==8){randomIndex --} else if (check==0){randomIndex++} else (randomIndex++)
+            }
+            imageArray[randomIndex].visibility = View.VISIBLE
+
+            handler.postDelayed(runnable,500)
+            check = randomIndex
         }
         handler.post(runnable)
 
